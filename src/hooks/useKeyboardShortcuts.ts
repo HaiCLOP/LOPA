@@ -40,7 +40,9 @@ export function useKeyboardShortcuts() {
         insights: { combo: { key: '3', ctrl: true }, handler: () => setActiveNav('insights') },
         activity: { combo: { key: '4', ctrl: true }, handler: () => setActiveNav('activity') },
         goals: { combo: { key: '5', ctrl: true }, handler: () => setActiveNav('goals') },
-        settings: { combo: { key: '6', ctrl: true }, handler: () => setActiveNav('settings') },
+        coach: { combo: { key: '6', ctrl: true }, handler: () => setActiveNav('ai-coach') },
+        reports: { combo: { key: '7', ctrl: true }, handler: () => setActiveNav('reports') },
+        settings: { combo: { key: '8', ctrl: true }, handler: () => setActiveNav('settings') },
         escape: { combo: { key: 'Escape' }, handler: () => setActiveNav('dashboard') },
       };
 
