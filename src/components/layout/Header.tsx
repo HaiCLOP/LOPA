@@ -1,12 +1,18 @@
 import { motion } from 'framer-motion';
-import { Bell, TrendingUp } from 'lucide-react';
+import { Bell, TrendingUp, TrendingDown } from 'lucide-react';
 import { CircularProgress } from '../ui/CircularProgress';
-import { userProfile, focusStreak, productivityScore } from '../../data/mockData';
+import { userProfile, focusStreak, productivityScore as mockScore } from '../../data/mockData';
 import { getGreeting, getScoreColor } from '../../lib/utils';
+import { useProductivityScore } from '../../hooks/useTauri';
 
 export function Header() {
   const greeting = getGreeting();
-  const scoreColor = getScoreColor(productivityScore);
+  const { data: liveScore } = useProductivityScore(15000);
+
+  const score = liveScore?.score ? Math.round(liveScore.score) : mockScore;
+  const label = liveScore?.label || 'Good';
+  const scoreColor = getScoreColor(score);
+  const isUp = score >= 60;
 
   return (
     <motion.header
@@ -49,14 +55,14 @@ export function Header() {
           className="glass rounded-xl px-4 py-2 flex items-center gap-3"
         >
           <CircularProgress
-            value={productivityScore}
+            value={score}
             size={42}
             strokeWidth={3.5}
             color={scoreColor}
             trackColor="rgba(0,0,0,0.05)"
           >
             <span className="text-[13px] font-bold text-[var(--color-text-primary)]">
-              {productivityScore}
+              {score}
             </span>
           </CircularProgress>
           <div>
@@ -65,9 +71,13 @@ export function Header() {
             </p>
             <div className="flex items-center gap-1">
               <span className="text-[13px] font-semibold" style={{ color: scoreColor }}>
-                Good
+                {label}
               </span>
-              <TrendingUp className="w-3 h-3" style={{ color: scoreColor }} />
+              {isUp ? (
+                <TrendingUp className="w-3 h-3" style={{ color: scoreColor }} />
+              ) : (
+                <TrendingDown className="w-3 h-3" style={{ color: scoreColor }} />
+              )}
             </div>
           </div>
         </motion.div>
