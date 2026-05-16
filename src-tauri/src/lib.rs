@@ -4,10 +4,12 @@ mod commands;
 mod database;
 mod export;
 mod insights;
+mod reminders;
 mod tracker;
 
 use commands::AppState;
 use database::Database;
+use reminders::BreakReminder;
 use tracker::Tracker;
 use tauri::{
     Manager,
@@ -32,6 +34,10 @@ pub fn run() {
             let db = Arc::new(db);
             let tracker = Tracker::new();
             tracker.start(db.clone());
+
+            // Break reminders (50 minute intervals)
+            let break_reminder = BreakReminder::new(50);
+            break_reminder.start(app.handle().clone());
 
             app.manage(AppState { db, tracker });
 
@@ -90,6 +96,7 @@ pub fn run() {
             commands::get_focus_patterns,
             commands::get_insights,
             commands::get_recommendations,
+            commands::export_data,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Lopa");

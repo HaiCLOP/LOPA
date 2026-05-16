@@ -121,3 +121,9 @@ pub fn get_recommendations(state: State<AppState>, date: Option<String>) -> Resu
     let date = date.unwrap_or_else(|| Local::now().format("%Y-%m-%d").to_string());
     Ok(InsightGenerator::generate_recommendations(&state.db, &date))
 }
+
+#[tauri::command]
+pub fn export_data(state: State<AppState>, date: Option<String>) -> Result<crate::export::ExportData, String> {
+    let date = date.unwrap_or_else(|| Local::now().format("%Y-%m-%d").to_string());
+    Ok(crate::export::export_daily_summary(&state.db, &date))
+}
