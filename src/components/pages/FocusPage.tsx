@@ -15,11 +15,11 @@ const PRESETS = [
 export function FocusPage() {
   const [selectedPreset, setSelectedPreset] = useState(1); // Pomodoro
   const [totalSessions, setTotalSessions] = useState(0);
-  const duration = PRESETS[selectedPreset].minutes;
-  const { timeLeft, isRunning, progress, start, pause, reset } = useTimer(duration);
+  const duration = PRESETS[selectedPreset].minutes * 60;
+  const { timeRemaining, isRunning, progress, start, pause, reset } = useTimer(duration);
 
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+  const minutes = Math.floor(timeRemaining / 60);
+  const seconds = timeRemaining % 60;
 
   const handleComplete = () => {
     setTotalSessions((p) => p + 1);
@@ -27,7 +27,7 @@ export function FocusPage() {
   };
 
   // Auto-complete when timer hits 0
-  if (timeLeft === 0 && isRunning) {
+  if (timeRemaining === 0 && isRunning) {
     handleComplete();
   }
 

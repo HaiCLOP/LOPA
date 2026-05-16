@@ -24,7 +24,7 @@ function getSystemTheme(): 'light' | 'dark' {
 
 export const useAppStore = create<AppState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       activeNav: 'dashboard',
       setActiveNav: (id) => set({ activeNav: id }),
       focusDuration: 1500,
@@ -41,7 +41,7 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'lopa-settings',
-      partials: (state) => ({
+      partialize: (state) => ({
         theme: state.theme,
         sidebarCollapsed: state.sidebarCollapsed,
       }),

@@ -83,7 +83,7 @@ function CurrentPage() {
 
 export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const { theme, setTheme } = useAppStore();
+  const { theme } = useAppStore();
 
   useKeyboardShortcuts();
   useBreakReminder(50);
