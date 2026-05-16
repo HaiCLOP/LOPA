@@ -24,28 +24,21 @@ export function GlassCard({
   padding = 'md',
   delay = 0,
 }: GlassCardProps) {
-  const glassClass = {
-    default: 'glass',
-    heavy: 'glass-heavy',
-    light: 'glass-light',
-    sidebar: 'glass-sidebar',
-  }[variant];
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 6, scale: 0.99 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.45,
+        duration: 0.3,
         delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: 'easeOut',
       }}
-      className={cn(
-        glassClass,
-        'rounded-2xl',
-        paddingMap[padding],
-        className
-      )}
+      className={cn(paddingMap[padding], className)}
+      style={{
+        background: variant === 'heavy' ? 'var(--color-surface-elevated)' : 'var(--color-surface-card)',
+        border: '1px solid var(--color-hairline)',
+        borderRadius: 0,
+      }}
     >
       {children}
     </motion.div>

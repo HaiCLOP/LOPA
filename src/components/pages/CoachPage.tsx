@@ -153,7 +153,7 @@ export function CoachPage() {
                 }`}>
                   <p className="text-[13px] leading-relaxed">{msg.content}</p>
                   <p className={`text-[10px] mt-1 ${msg.role === 'user' ? 'text-white/50' : 'text-[var(--color-text-muted)]'}`}>
-                    {msg.timestamp}
+                    {typeof msg.timestamp === 'string' ? msg.timestamp : msg.timestamp.toLocaleTimeString()}
                   </p>
                 </div>
               </motion.div>

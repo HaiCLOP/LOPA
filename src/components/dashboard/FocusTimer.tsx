@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Play, Pause, RotateCcw, Settings2, ChevronDown } from 'lucide-react';
+import { Play, Pause, RotateCcw, ChevronDown } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { CircularProgress } from '../ui/CircularProgress';
 import { useTimer } from '../../hooks/useTimer';
@@ -11,39 +11,33 @@ export function FocusTimer() {
   return (
     <GlassCard padding="lg" delay={0.35} className="flex flex-col items-center">
       {/* Header */}
-      <div className="flex items-center justify-between w-full mb-4">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-indigo-500" />
-          <h3 className="text-[14px] font-semibold text-[var(--color-text-primary)]">
-            Focus Timer
-          </h3>
-        </div>
-        <button className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-black/[0.04] transition-colors">
-          <Settings2 className="w-4 h-4 text-[var(--color-text-muted)]" />
-        </button>
+      <div className="flex items-center justify-between w-full mb-4" style={{ borderBottom: '1px solid var(--color-hairline)', paddingBottom: 12 }}>
+        <h3 className="text-[11px] font-bold tracking-[1.5px] uppercase text-white">
+          FOCUS TIMER
+        </h3>
       </div>
 
       {/* Timer Ring */}
       <div className="my-3">
         <CircularProgress
           value={progress}
-          size={140}
-          strokeWidth={5}
-          color="#6366f1"
-          trackColor="rgba(0,0,0,0.04)"
+          size={130}
+          strokeWidth={4}
+          color="#1c69d4"
+          trackColor="var(--color-hairline)"
           animate={false}
         >
           <div className="flex flex-col items-center">
             <motion.span
               key={timeRemaining}
-              initial={{ scale: 1.02 }}
+              initial={{ scale: 1.01 }}
               animate={{ scale: 1 }}
-              className="text-[32px] font-bold text-[var(--color-text-primary)] tracking-tight tabular-nums leading-none"
+              className="text-[30px] font-bold text-white tracking-tight tabular-nums leading-none"
             >
               {formatTime(timeRemaining)}
             </motion.span>
-            <button className="flex items-center gap-1 mt-1.5 text-[11px] text-[var(--color-text-muted)] font-medium hover:text-[var(--color-text-secondary)] transition-colors">
-              Deep Focus
+            <button className="flex items-center gap-1 mt-2 text-[10px] font-bold tracking-[1px] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+              DEEP FOCUS
               <ChevronDown className="w-3 h-3" />
             </button>
           </div>
@@ -53,33 +47,25 @@ export function FocusTimer() {
       {/* Controls */}
       <div className="flex items-center gap-3 mt-2">
         <motion.button
-          whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
           onClick={reset}
-          className="w-9 h-9 rounded-full flex items-center justify-center bg-gray-100/60 hover:bg-gray-200/60 transition-colors"
+          className="w-8 h-8 flex items-center justify-center"
+          style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-hairline)' }}
         >
-          <RotateCcw className="w-4 h-4 text-[var(--color-text-muted)]" />
+          <RotateCcw className="w-3.5 h-3.5" style={{ color: 'var(--color-text-muted)' }} />
         </motion.button>
 
         <motion.button
-          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={isRunning ? pause : start}
-          className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/20 hover:shadow-xl hover:shadow-indigo-500/30 transition-shadow"
+          className="w-11 h-11 flex items-center justify-center text-white"
+          style={{ background: 'var(--color-m-blue)' }}
         >
           {isRunning ? (
             <Pause className="w-5 h-5" fill="currentColor" />
           ) : (
             <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
           )}
-        </motion.button>
-
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-9 h-9 rounded-full flex items-center justify-center bg-gray-100/60 hover:bg-gray-200/60 transition-colors"
-        >
-          <Settings2 className="w-4 h-4 text-[var(--color-text-muted)]" />
         </motion.button>
       </div>
     </GlassCard>

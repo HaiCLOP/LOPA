@@ -18,12 +18,7 @@ const ICONS: Record<ToastType, React.ReactNode> = {
   info: <Info className="w-4 h-4 text-blue-500" />,
 };
 
-const BG_COLORS: Record<ToastType, string> = {
-  success: 'rgba(34, 197, 94, 0.08)',
-  error: 'rgba(239, 68, 68, 0.08)',
-  warning: 'rgba(245, 158, 11, 0.08)',
-  info: 'rgba(59, 130, 246, 0.08)',
-};
+
 
 // Simple global toast store
 let toastListeners: ((toasts: Toast[]) => void)[] = [];
@@ -72,8 +67,8 @@ export function ToastContainer() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="glass rounded-xl px-4 py-3 flex items-center gap-3 shadow-lg border border-gray-200/40"
-            style={{ backgroundColor: BG_COLORS[toast.type] }}
+            className="px-4 py-3 flex items-center gap-3"
+            style={{ backgroundColor: 'var(--color-surface-card)', border: '1px solid var(--color-hairline)' }}
           >
             {ICONS[toast.type]}
             <span className="text-[13px] font-medium text-[var(--color-text-primary)] flex-1">

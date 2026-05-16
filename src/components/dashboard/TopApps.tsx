@@ -14,7 +14,6 @@ function formatMinutes(minutes: number): string {
 export function TopApps() {
   const { data: liveApps } = useTopApps(15000);
 
-  // Use live data when available, fall back to mock
   const apps = liveApps && liveApps.length > 0
     ? liveApps.map((app: LiveAppUsage) => ({
         name: app.app_name,
@@ -31,42 +30,42 @@ export function TopApps() {
   return (
     <GlassCard padding="lg" delay={0.25} className="flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[15px] font-semibold text-[var(--color-text-primary)]">
-          Top Apps
+      <div className="flex items-center justify-between mb-4" style={{ borderBottom: '1px solid var(--color-hairline)', paddingBottom: 12 }}>
+        <h3 className="text-[11px] font-bold tracking-[1.5px] uppercase text-white">
+          TOP APPS
         </h3>
-        <button className="text-[12px] font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">
-          View all
+        <button className="text-[10px] font-bold tracking-[1px] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+          VIEW ALL →
         </button>
       </div>
 
       {/* App List */}
-      <div className="space-y-3.5">
+      <div className="space-y-4">
         {apps.map((app, index) => (
           <motion.div
             key={app.name}
-            initial={{ opacity: 0, x: 8 }}
+            initial={{ opacity: 0, x: 6 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 + index * 0.08, duration: 0.35 }}
+            transition={{ delay: 0.2 + index * 0.06, duration: 0.3 }}
             className="flex items-center gap-3"
           >
-            <AppIcon app={app.icon} size={30} />
+            <AppIcon app={app.icon} size={28} />
             <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-[13px] font-medium text-[var(--color-text-primary)] truncate">
+              <div className="flex items-center justify-between mb-1.5">
+                <p className="text-[12px] font-medium text-white truncate">
                   {app.name}
                 </p>
-                <p className="text-[12px] text-[var(--color-text-muted)] font-medium tabular-nums ml-2 flex-shrink-0">
+                <p className="text-[11px] font-bold tabular-nums ml-2 flex-shrink-0" style={{ color: 'var(--color-text-secondary)' }}>
                   {app.duration}
                 </p>
               </div>
-              <div className="w-full h-[5px] rounded-full bg-gray-100/80 overflow-hidden">
+              <div className="w-full h-[3px] overflow-hidden" style={{ background: 'var(--color-hairline)' }}>
                 <motion.div
-                  className="h-full rounded-full"
+                  className="h-full"
                   style={{ backgroundColor: app.color }}
                   initial={{ width: 0 }}
                   animate={{ width: `${(app.minutes / maxMinutes) * 100}%` }}
-                  transition={{ duration: 0.8, delay: 0.4 + index * 0.1, ease: 'easeOut' }}
+                  transition={{ duration: 0.6, delay: 0.3 + index * 0.08, ease: 'easeOut' }}
                 />
               </div>
             </div>

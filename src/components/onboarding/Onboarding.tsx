@@ -8,32 +8,32 @@ interface OnboardingProps {
 
 const steps = [
   {
-    title: 'Welcome to Lopa',
-    subtitle: 'Your AI-powered digital wellbeing companion',
-    description: 'Lopa helps you understand your digital habits and build healthier relationships with technology.',
-    icon: <Leaf className="w-10 h-10 text-white" />,
-    gradient: 'from-emerald-400 to-teal-600',
+    title: 'LOPA',
+    subtitle: 'AI-POWERED DIGITAL WELLBEING',
+    description: 'Understand your digital habits. Build healthier relationships with technology. Every byte stays on your machine.',
+    icon: <Leaf className="w-8 h-8 text-white" />,
+    accent: '#1c69d4',
   },
   {
-    title: 'Privacy First',
-    subtitle: 'Your data stays on your device',
-    description: 'All tracking and analytics happen locally. No data ever leaves your machine — we believe privacy is a fundamental right.',
-    icon: <Shield className="w-10 h-10 text-white" />,
-    gradient: 'from-blue-400 to-indigo-600',
+    title: 'PRIVACY FIRST',
+    subtitle: 'YOUR DATA STAYS LOCAL',
+    description: 'All tracking and analytics happen on-device. No cloud. No telemetry. Zero data leaves your machine.',
+    icon: <Shield className="w-8 h-8 text-white" />,
+    accent: '#0fa336',
   },
   {
-    title: 'AI-Powered Insights',
-    subtitle: 'Smart recommendations tailored to you',
-    description: 'Our analytics engine detects your focus patterns, identifies peak productivity windows, and suggests improvements.',
-    icon: <Brain className="w-10 h-10 text-white" />,
-    gradient: 'from-violet-400 to-purple-600',
+    title: 'AI INSIGHTS',
+    subtitle: 'PATTERN DETECTION ENGINE',
+    description: 'Our analytics engine detects focus patterns, identifies peak productivity windows, and generates actionable recommendations.',
+    icon: <Brain className="w-8 h-8 text-white" />,
+    accent: '#8b5cf6',
   },
   {
-    title: 'Mindful Focus',
-    subtitle: 'Built-in focus timer and break reminders',
-    description: 'Use Pomodoro sessions, track your focus streak, and get gentle reminders to take care of yourself.',
-    icon: <Clock className="w-10 h-10 text-white" />,
-    gradient: 'from-orange-400 to-rose-500',
+    title: 'MINDFUL FOCUS',
+    subtitle: 'TIMER & BREAK REMINDERS',
+    description: 'Pomodoro sessions. Focus streak tracking. Background break reminders every 50 minutes. Built for sustained performance.',
+    icon: <Clock className="w-8 h-8 text-white" />,
+    accent: '#e22718',
   },
 ];
 
@@ -43,70 +43,70 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   const isLast = step === steps.length - 1;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: 'radial-gradient(circle at 1px 1px, #000 1px, transparent 0)',
-        backgroundSize: '32px 32px',
-      }} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: '#000' }}>
+      {/* M Stripe at top */}
+      <div className="absolute top-0 left-0 right-0 m-stripe" />
 
       <AnimatePresence mode="wait">
         <motion.div
           key={step}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+          exit={{ opacity: 0, y: -16 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
           className="flex flex-col items-center text-center max-w-md px-8"
         >
-          {/* Icon Circle */}
+          {/* Icon */}
           <motion.div
-            className={`w-24 h-24 rounded-3xl bg-gradient-to-br ${current.gradient} flex items-center justify-center shadow-2xl mb-8`}
-            initial={{ scale: 0.8, rotate: -10 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className="w-16 h-16 flex items-center justify-center mb-8"
+            style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-hairline)' }}
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           >
             {current.icon}
           </motion.div>
 
           {/* Title */}
-          <h1 className="text-[28px] font-bold text-[var(--color-text-primary)] tracking-tight mb-2">
+          <h1 className="text-[32px] font-bold text-white tracking-[-0.3px] uppercase mb-2">
             {current.title}
           </h1>
-          <p className="text-[15px] font-medium text-[var(--color-accent-indigo)] mb-4">
+          <p className="text-[11px] font-bold tracking-[2px] uppercase mb-6" style={{ color: current.accent }}>
             {current.subtitle}
           </p>
-          <p className="text-[14px] text-[var(--color-text-muted)] leading-relaxed mb-10 max-w-sm">
+          <p className="text-[14px] font-light leading-relaxed mb-10 max-w-sm" style={{ color: 'var(--color-text-secondary)' }}>
             {current.description}
           </p>
 
-          {/* Dots */}
+          {/* Progress */}
           <div className="flex gap-2 mb-8">
             {steps.map((_, i) => (
-              <motion.div
+              <div
                 key={i}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === step ? 'w-8 bg-[var(--color-accent-indigo)]' : 'w-2 bg-gray-300'
-                }`}
+                className="h-[2px] transition-all duration-300"
+                style={{
+                  width: i === step ? 32 : 8,
+                  background: i === step ? '#fff' : 'var(--color-hairline-strong)',
+                }}
               />
             ))}
           </div>
 
           {/* CTA */}
           <motion.button
-            whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => isLast ? onComplete() : setStep(step + 1)}
-            className={`flex items-center gap-2 px-8 py-3.5 rounded-xl text-white text-[14px] font-semibold shadow-lg bg-gradient-to-r ${current.gradient}`}
+            className="flex items-center gap-2 px-8 py-3 text-white text-[12px] font-bold tracking-[1.5px] uppercase"
+            style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'transparent' }}
           >
             {isLast ? (
               <>
                 <Check className="w-4 h-4" />
-                Get Started
+                GET STARTED
               </>
             ) : (
               <>
-                Continue
+                CONTINUE
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -116,9 +116,10 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           {!isLast && (
             <button
               onClick={onComplete}
-              className="mt-4 text-[12px] text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+              className="mt-4 text-[11px] tracking-[1px] uppercase transition-colors"
+              style={{ color: 'var(--color-text-muted)' }}
             >
-              Skip introduction
+              Skip
             </button>
           )}
         </motion.div>

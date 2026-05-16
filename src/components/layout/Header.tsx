@@ -1,96 +1,62 @@
 import { motion } from 'framer-motion';
-import { Bell, TrendingUp, TrendingDown } from 'lucide-react';
-import { CircularProgress } from '../ui/CircularProgress';
-import { userProfile, focusStreak, productivityScore as mockScore } from '../../data/mockData';
-import { getGreeting, getScoreColor } from '../../lib/utils';
+import { Search, Bell } from 'lucide-react';
 import { useProductivityScore } from '../../hooks/useTauri';
 
 export function Header() {
+  const { data: liveScore } = useProductivityScore(30000);
+  const score = liveScore?.score ? Math.round(liveScore.score) : 76;
   const greeting = getGreeting();
-  const { data: liveScore } = useProductivityScore(15000);
-
-  const score = liveScore?.score ? Math.round(liveScore.score) : mockScore;
-  const label = liveScore?.label || 'Good';
-  const scoreColor = getScoreColor(score);
-  const isUp = score >= 60;
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
-      className="flex items-center justify-between px-2 pt-1 pb-3"
+      initial={{ y: -8, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="flex items-center justify-between pb-5 mb-1"
+      style={{ borderBottom: '1px solid var(--color-hairline)' }}
     >
-      {/* Greeting */}
       <div>
-        <h2 className="text-[22px] font-bold text-[var(--color-text-primary)] tracking-tight">
-          {greeting.text}, {userProfile.firstName} {greeting.emoji}
-        </h2>
-        <p className="text-[13px] text-[var(--color-text-secondary)] mt-0.5">
-          Let's make today intentional and meaningful.
+        <h1 className="text-[28px] font-bold text-white tracking-[-0.3px] uppercase">
+          {greeting}
+        </h1>
+        <p className="text-[13px] font-light mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+          {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
         </p>
       </div>
 
-      {/* Right stats */}
       <div className="flex items-center gap-4">
-        {/* Focus Streak */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="glass rounded-xl px-4 py-2.5 flex items-center gap-2.5"
-        >
-          <span className="text-base">🔥</span>
-          <div>
-            <p className="text-[10.5px] text-[var(--color-text-muted)] font-medium leading-none mb-0.5">
-              Focus Streak
-            </p>
-            <p className="text-[14px] font-bold text-[var(--color-text-primary)] leading-none">
-              {focusStreak} days
-            </p>
+        {/* Score */}
+        <div className="flex items-center gap-3 px-4 py-2" style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-hairline)' }}>
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] font-bold tracking-[1.5px] uppercase" style={{ color: 'var(--color-text-muted)' }}>SCORE</span>
+            <span className="text-[20px] font-bold text-white tabular-nums">{score}</span>
           </div>
-        </motion.div>
+          <div className="w-[2px] h-6" style={{ background: scoreColor(score) }} />
+        </div>
 
-        {/* Productivity Score */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="glass rounded-xl px-4 py-2 flex items-center gap-3"
-        >
-          <CircularProgress
-            value={score}
-            size={42}
-            strokeWidth={3.5}
-            color={scoreColor}
-            trackColor="rgba(0,0,0,0.05)"
-          >
-            <span className="text-[13px] font-bold text-[var(--color-text-primary)]">
-              {score}
-            </span>
-          </CircularProgress>
-          <div>
-            <p className="text-[10.5px] text-[var(--color-text-muted)] font-medium leading-none mb-0.5">
-              Productivity Score
-            </p>
-            <div className="flex items-center gap-1">
-              <span className="text-[13px] font-semibold" style={{ color: scoreColor }}>
-                {label}
-              </span>
-              {isUp ? (
-                <TrendingUp className="w-3 h-3" style={{ color: scoreColor }} />
-              ) : (
-                <TrendingDown className="w-3 h-3" style={{ color: scoreColor }} />
-              )}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Notification Bell */}
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-10 h-10 rounded-xl glass flex items-center justify-center hover:bg-white/60 transition-colors"
-        >
-          <Bell className="w-[18px] h-[18px] text-[var(--color-text-secondary)]" />
-        </motion.button>
+        {/* Actions */}
+        <button className="w-9 h-9 flex items-center justify-center" style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-hairline)' }}>
+          <Search className="w-4 h-4" style={{ color: 'var(--color-text-muted)' }} />
+        </button>
+        <button className="w-9 h-9 flex items-center justify-center relative" style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-hairline)' }}>
+          <Bell className="w-4 h-4" style={{ color: 'var(--color-text-muted)' }} />
+          <span className="absolute -top-1 -right-1 w-2 h-2" style={{ background: 'var(--color-m-red)' }} />
+        </button>
       </div>
     </motion.header>
   );
+}
+
+function getGreeting(): string {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good Morning';
+  if (h < 17) return 'Good Afternoon';
+  return 'Good Evening';
+}
+
+function scoreColor(s: number): string {
+  if (s >= 80) return '#0fa336';
+  if (s >= 60) return '#1c69d4';
+  if (s >= 40) return '#f4b400';
+  return '#e22718';
 }

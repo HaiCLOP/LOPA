@@ -16,30 +16,27 @@ export function TrackingBadge({ isTracking, onToggle }: TrackingBadgeProps) {
       >
         <motion.button
           onClick={onToggle}
-          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className={`
-            inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11.5px] font-semibold
-            transition-all duration-300 cursor-pointer select-none
-            ${isTracking
-              ? 'bg-emerald-50/80 text-emerald-700 border border-emerald-200/60'
-              : 'bg-gray-100/60 text-gray-500 border border-gray-200/40'
-            }
-          `}
+          className="inline-flex items-center gap-2 px-4 py-2 text-[10px] font-bold tracking-[1.5px] uppercase cursor-pointer select-none"
+          style={{
+            background: 'transparent',
+            border: `1px solid ${isTracking ? '#0fa336' : 'var(--color-hairline)'}`,
+            color: isTracking ? '#0fa336' : 'var(--color-text-muted)',
+          }}
         >
           {isTracking ? (
             <>
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full bg-green-500 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 bg-green-500" />
               </span>
               <Radio className="w-3 h-3" />
-              Tracking Active
+              TRACKING ACTIVE
             </>
           ) : (
             <>
               <Pause className="w-3 h-3" />
-              Tracking Paused
+              TRACKING PAUSED
             </>
           )}
         </motion.button>

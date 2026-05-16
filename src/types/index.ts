@@ -43,9 +43,9 @@ export interface AIInsightData {
 
 export interface ChatMessage {
   id: string;
-  role: 'user' | 'ai';
+  role: 'user' | 'ai' | 'assistant';
   content: string;
-  timestamp: string;
+  timestamp: string | Date;
 }
 
 export interface WellbeingMetric {
