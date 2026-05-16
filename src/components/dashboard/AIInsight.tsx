@@ -1,64 +1,87 @@
 import { motion } from 'framer-motion';
-import { Sparkles, MoreVertical } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
-import { aiInsight } from '../../data/mockData';
+import { MoreVertical, ArrowRight } from 'lucide-react';
+import { useInsights, type InsightData } from '../../hooks/useTauri';
+
+const fallbackInsight: InsightData = {
+  id: 'peak_window',
+  title: 'Peak Focus Window',
+  description: "You're most productive between 8:20 PM – 10:15 PM. Consider planning your deep work during this time.",
+  category: 'focus',
+  priority: 'high',
+  action: 'Schedule focus blocks',
+  icon: '⚡',
+};
 
 export function AIInsight() {
+  const { data: liveInsights } = useInsights(30000);
+
+  const insight = liveInsights && liveInsights.length > 0
+    ? liveInsights[0]
+    : fallbackInsight;
+
+  // Parse time range from description if present
+  const timeMatch = insight.description.match(/between (.+? [AP]M)\s*[–-]\s*(.+? [AP]M)/);
+  const startTime = timeMatch ? timeMatch[1] : null;
+  const endTime = timeMatch ? timeMatch[2] : null;
+  const bodyText = timeMatch
+    ? insight.description.replace(/between .+? [AP]M\s*[–-]\s*.+? [AP]M\.?\s*/, '')
+    : insight.description;
+
   return (
     <GlassCard padding="lg" delay={0.3} className="flex flex-col relative overflow-hidden">
-      {/* Ambient background gradient */}
-      <div
-        className="absolute inset-0 opacity-[0.06] pointer-events-none"
-        style={{
-          background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 30%, #fefce8 70%, #fffbeb 100%)',
-        }}
-      />
-
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <h3 className="text-[14px] font-semibold text-[var(--color-text-primary)]">
-              AI Insight
-            </h3>
-          </div>
-          <button className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-black/[0.04] transition-colors">
-            <MoreVertical className="w-4 h-4 text-[var(--color-text-muted)]" />
-          </button>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-[16px]">{insight.icon}</span>
+          <h3 className="text-[15px] font-semibold text-[var(--color-text-primary)]">
+            AI Insight
+          </h3>
         </div>
-
-        {/* Content */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          <p className="text-[13px] text-[var(--color-text-secondary)] mb-1">
-            You're most productive between
-          </p>
-          <p className="text-[18px] font-bold text-[var(--color-text-primary)] tracking-tight mb-2">
-            {aiInsight.timeRange}
-          </p>
-          <p className="text-[12px] text-[var(--color-text-muted)] leading-relaxed mb-4">
-            {aiInsight.description}
-          </p>
-        </motion.div>
-
-        {/* Landscape illustration placeholder */}
-        <div className="rounded-lg overflow-hidden mb-3 h-14 bg-gradient-to-r from-emerald-50/60 via-sky-50/40 to-amber-50/50 flex items-end justify-center relative">
-          {/* Simple mountain silhouette */}
-          <svg viewBox="0 0 200 40" className="w-full h-full" preserveAspectRatio="none">
-            <path d="M0,40 L30,18 L50,28 L80,8 L110,25 L140,12 L170,22 L200,15 L200,40 Z" fill="rgba(34,197,94,0.12)" />
-            <path d="M0,40 L40,25 L70,32 L100,20 L130,30 L160,22 L200,28 L200,40 Z" fill="rgba(34,197,94,0.08)" />
-          </svg>
-        </div>
-
-        {/* Action */}
-        <button className="text-[12px] font-medium text-[var(--color-text-secondary)] px-3 py-1.5 rounded-lg border border-gray-200/60 hover:bg-black/[0.03] transition-colors">
-          View full Insight
+        <button className="p-1 rounded-lg hover:bg-black/[0.04] transition-colors">
+          <MoreVertical className="w-4 h-4 text-[var(--color-text-muted)]" />
         </button>
       </div>
+
+      {/* Insight Content */}
+      <div className="flex-1">
+        <p className="text-[13px] text-[var(--color-text-secondary)] mb-1">
+          {startTime ? `You're most productive between` : insight.title}
+        </p>
+        {startTime && endTime ? (
+          <p className="text-[22px] font-bold text-[var(--color-text-primary)] mb-2">
+            {startTime} – {endTime}
+          </p>
+        ) : null}
+        <p className="text-[12px] text-[var(--color-text-muted)] leading-relaxed">
+          {bodyText || insight.description}
+        </p>
+      </div>
+
+      {/* Landscape Illustration */}
+      <div className="mt-3 h-16 rounded-lg overflow-hidden relative">
+        <svg viewBox="0 0 400 60" className="w-full h-full" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#e0f2e9" />
+              <stop offset="100%" stopColor="#d1fae5" />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="60" fill="url(#skyGrad)" />
+          <path d="M0,40 Q50,15 100,30 T200,25 T300,35 T400,20 V60 H0Z" fill="#86efac" opacity="0.4" />
+          <path d="M0,45 Q80,25 160,38 T320,30 T400,40 V60 H0Z" fill="#4ade80" opacity="0.3" />
+          <path d="M0,50 Q100,35 200,45 T400,42 V60 H0Z" fill="#22c55e" opacity="0.2" />
+        </svg>
+      </div>
+
+      {/* CTA */}
+      <motion.button
+        whileHover={{ x: 2 }}
+        className="flex items-center gap-1.5 text-[12px] font-medium text-[var(--color-accent-indigo)] mt-3 group"
+      >
+        {insight.action || 'View full Insight'}
+        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+      </motion.button>
     </GlassCard>
   );
 }
