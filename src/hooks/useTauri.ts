@@ -170,3 +170,103 @@ export function useRecentActivity(refreshInterval: number = 10000) {
   }, []);
   return usePolling(fetcher, refreshInterval, tauri);
 }
+
+// ═══════════════════════════════════════════
+// Analytics types
+// ═══════════════════════════════════════════
+
+export interface ProductivityScore {
+  score: number;
+  label: string;
+  productive_pct: number;
+  communication_pct: number;
+  entertainment_pct: number;
+  other_pct: number;
+  focus_ratio: number;
+  switch_penalty: number;
+}
+
+export interface WellbeingFactor {
+  id: string;
+  label: string;
+  value: string;
+  status: string;
+  weight: number;
+}
+
+export interface WellbeingAssessment {
+  score: number;
+  label: string;
+  description: string;
+  factors: WellbeingFactor[];
+}
+
+export interface FocusPattern {
+  peak_start_hour: number;
+  peak_end_hour: number;
+  avg_focus_duration_min: number;
+  longest_streak_min: number;
+  distraction_count: number;
+}
+
+export interface InsightData {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  priority: string;
+  action: string | null;
+  icon: string;
+}
+
+export interface RecommendationData {
+  id: string;
+  text: string;
+  reasoning: string;
+  impact: string;
+}
+
+// ═══════════════════════════════════════════
+// Analytics hooks
+// ═══════════════════════════════════════════
+
+export function useProductivityScore(refreshInterval: number = 15000) {
+  const tauri = isTauri();
+  const fetcher = useCallback(async () => {
+    return invoke<ProductivityScore>('get_productivity_score', { date: null });
+  }, []);
+  return usePolling(fetcher, refreshInterval, tauri);
+}
+
+export function useWellbeingScore(refreshInterval: number = 20000) {
+  const tauri = isTauri();
+  const fetcher = useCallback(async () => {
+    return invoke<WellbeingAssessment>('get_wellbeing_score', { date: null });
+  }, []);
+  return usePolling(fetcher, refreshInterval, tauri);
+}
+
+export function useFocusPatterns(refreshInterval: number = 30000) {
+  const tauri = isTauri();
+  const fetcher = useCallback(async () => {
+    return invoke<FocusPattern>('get_focus_patterns', { date: null });
+  }, []);
+  return usePolling(fetcher, refreshInterval, tauri);
+}
+
+export function useInsights(refreshInterval: number = 30000) {
+  const tauri = isTauri();
+  const fetcher = useCallback(async () => {
+    return invoke<InsightData[]>('get_insights', { date: null });
+  }, []);
+  return usePolling(fetcher, refreshInterval, tauri);
+}
+
+export function useRecommendations(refreshInterval: number = 30000) {
+  const tauri = isTauri();
+  const fetcher = useCallback(async () => {
+    return invoke<RecommendationData[]>('get_recommendations', { date: null });
+  }, []);
+  return usePolling(fetcher, refreshInterval, tauri);
+}
+
