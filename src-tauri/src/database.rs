@@ -39,7 +39,7 @@ pub struct HourlyActivity {
     pub other: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct DailyStats {
     pub screen_time_minutes: f64,
     pub focus_time_minutes: f64,
