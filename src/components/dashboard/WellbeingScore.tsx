@@ -1,88 +1,109 @@
 import { motion } from 'framer-motion';
-import { Moon, Heart, Leaf, Monitor, ChevronDown } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { CircularProgress } from '../ui/CircularProgress';
-import { wellbeingData } from '../../data/mockData';
-import { getScoreColor, getStatusColor } from '../../lib/utils';
+import { ChevronDown, Moon, Heart, Shield, Monitor, Zap } from 'lucide-react';
+import { useWellbeingScore, type WellbeingFactor } from '../../hooks/useTauri';
 
-const iconMap: Record<string, React.ElementType> = {
-  Moon, Heart, Leaf, Monitor,
+const FACTOR_ICONS: Record<string, React.ReactNode> = {
+  screen_balance: <Monitor className="w-4 h-4" />,
+  mindful_breaks: <Shield className="w-4 h-4" />,
+  focus_quality: <Zap className="w-4 h-4" />,
+  context_switches: <Moon className="w-4 h-4" />,
+  digital_diet: <Heart className="w-4 h-4" />,
 };
 
+const STATUS_COLORS: Record<string, string> = {
+  great: '#22c55e',
+  good: '#3b82f6',
+  fair: '#f59e0b',
+  poor: '#ef4444',
+};
+
+// Fallback static data for browser mode
+const fallbackFactors: WellbeingFactor[] = [
+  { id: 'screen_balance', label: 'Screen Balance', value: '5h 42m', status: 'good', weight: 0.25 },
+  { id: 'mindful_breaks', label: 'Mindful Breaks', value: '6', status: 'great', weight: 0.2 },
+  { id: 'focus_quality', label: 'Focus Quality', value: '65%', status: 'good', weight: 0.25 },
+  { id: 'context_switches', label: 'Context Flow', value: '87', status: 'fair', weight: 0.15 },
+  { id: 'digital_diet', label: 'Digital Diet', value: '12%', status: 'great', weight: 0.15 },
+];
+
 export function WellbeingScore() {
-  const scoreColor = getScoreColor(wellbeingData.score);
+  const { data: liveWellbeing } = useWellbeingScore(20000);
+
+  const score = liveWellbeing?.score ?? 82;
+  const label = liveWellbeing?.label ?? 'Great';
+  const description = liveWellbeing?.description ?? 'This score reflects your digital balance and habits.';
+  const factors = liveWellbeing?.factors ?? fallbackFactors;
 
   return (
-    <GlassCard padding="md" delay={0.45} className="flex items-center gap-6">
-      {/* Score Section */}
-      <div className="flex items-center gap-4 pr-5 border-r border-gray-200/40 flex-shrink-0">
-        <div className="flex items-center gap-1.5 mb-0.5">
-          <span className="text-[13px] text-[var(--color-text-secondary)] font-medium">
+    <GlassCard padding="lg" delay={0.45} className="flex items-center gap-5">
+      {/* Score Ring */}
+      <div className="flex items-center gap-4 flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <span className="text-[14px] font-semibold text-[var(--color-text-primary)]">
             Wellbeing Score
           </span>
-          <ChevronDown className="w-3 h-3 text-[var(--color-text-muted)]" />
+          <ChevronDown className="w-3.5 h-3.5 text-[var(--color-text-muted)]" />
         </div>
-      </div>
-
-      <div className="flex items-center gap-4 pr-5 border-r border-gray-200/40 flex-shrink-0">
-        <CircularProgress
-          value={wellbeingData.score}
-          size={52}
-          strokeWidth={4}
-          color={scoreColor}
-          trackColor="rgba(0,0,0,0.05)"
-        >
-          <span className="text-[15px] font-bold text-[var(--color-text-primary)]">
-            {wellbeingData.score}
-          </span>
+        <CircularProgress value={score} max={100} size={52} strokeWidth={5} color="#22c55e">
+          <span className="text-[15px] font-bold text-[var(--color-text-primary)]">{score}</span>
         </CircularProgress>
-        <div>
-          <p className="text-[14px] font-bold" style={{ color: scoreColor }}>
-            {wellbeingData.label}
-          </p>
-          <p className="text-[10.5px] text-[var(--color-text-muted)] max-w-[140px] leading-snug">
-            {wellbeingData.description}
-          </p>
-          <button className="text-[10.5px] font-medium text-indigo-500 hover:text-indigo-600 transition-colors mt-0.5">
-            View breakdown
-          </button>
-        </div>
       </div>
 
-      {/* Metrics */}
-      <div className="flex items-center gap-6 flex-1 overflow-x-auto">
-        {wellbeingData.metrics.map((metric, index) => {
-          const Icon = iconMap[metric.icon] || Monitor;
-          const statusColor = getStatusColor(metric.status);
+      {/* Score Label */}
+      <div className="flex flex-col">
+        <span
+          className="text-[16px] font-bold"
+          style={{ color: score >= 80 ? '#22c55e' : score >= 60 ? '#3b82f6' : '#f59e0b' }}
+        >
+          {label}
+        </span>
+        <span className="text-[11px] text-[var(--color-text-muted)] max-w-[200px] leading-relaxed">
+          {description}
+        </span>
+        <button className="text-[11px] text-[var(--color-accent-indigo)] font-medium mt-0.5 text-left hover:underline">
+          View breakdown
+        </button>
+      </div>
 
-          return (
-            <motion.div
-              key={metric.id}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 + index * 0.08, duration: 0.3 }}
-              className="flex items-center gap-2.5 flex-shrink-0"
+      {/* Divider */}
+      <div className="w-px h-10 bg-gray-200/40" />
+
+      {/* Factors */}
+      <div className="flex items-center gap-6 overflow-x-auto flex-1">
+        {factors.map((factor, index) => (
+          <motion.div
+            key={factor.id}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 + index * 0.06, duration: 0.3 }}
+            className="flex items-center gap-2 flex-shrink-0"
+          >
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center"
+              style={{ backgroundColor: `${STATUS_COLORS[factor.status] || '#9ca3af'}18` }}
             >
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: `${statusColor}10` }}
+              <span style={{ color: STATUS_COLORS[factor.status] || '#9ca3af' }}>
+                {FACTOR_ICONS[factor.id] || <Monitor className="w-4 h-4" />}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[var(--color-text-muted)] leading-none">
+                {factor.label}
+              </span>
+              <span className="text-[14px] font-semibold text-[var(--color-text-primary)] leading-tight">
+                {factor.value}
+              </span>
+              <span
+                className="text-[9px] font-medium capitalize leading-none"
+                style={{ color: STATUS_COLORS[factor.status] || '#9ca3af' }}
               >
-                <Icon className="w-4 h-4" style={{ color: statusColor }} />
-              </div>
-              <div>
-                <p className="text-[10.5px] text-[var(--color-text-muted)] font-medium leading-none mb-1">
-                  {metric.label}
-                </p>
-                <p className="text-[14px] font-bold text-[var(--color-text-primary)] leading-none">
-                  {metric.value}
-                </p>
-                <p className="text-[10px] font-medium capitalize mt-0.5 leading-none" style={{ color: statusColor }}>
-                  {metric.status}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })}
+                {factor.status}
+              </span>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </GlassCard>
   );
