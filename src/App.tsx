@@ -11,6 +11,8 @@ import { TrackingBadge } from './components/dashboard/TrackingBadge';
 import { SettingsPage } from './components/pages/SettingsPage';
 import { InsightsPage } from './components/pages/InsightsPage';
 import { ActivityPage } from './components/pages/ActivityPage';
+import { FocusPage } from './components/pages/FocusPage';
+import { GoalsPage } from './components/pages/GoalsPage';
 import { statCards } from './data/mockData';
 import { useDailyStats, useTrackingControl } from './hooks/useTauri';
 import { useAppStore } from './stores/appStore';
@@ -52,10 +54,14 @@ function CurrentPage() {
   const { activeNav } = useAppStore();
 
   switch (activeNav) {
+    case 'focus':
+      return <FocusPage />;
     case 'insights':
       return <InsightsPage />;
     case 'activity':
       return <ActivityPage />;
+    case 'goals':
+      return <GoalsPage />;
     case 'settings':
       return <SettingsPage />;
     default:
