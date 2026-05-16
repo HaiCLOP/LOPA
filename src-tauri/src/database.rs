@@ -340,4 +340,21 @@ impl Database {
 
         Ok(results)
     }
+
+    /// Get daily stats for the past N days for weekly reports
+    pub fn get_weekly_stats(&self, days: i64) -> SqlResult<Vec<(String, DailyStats)>> {
+        let mut results = Vec::new();
+
+        for offset in (0..days).rev() {
+            let date = chrono::Local::now()
+                .checked_sub_signed(chrono::Duration::days(offset))
+                .map(|d| d.format("%Y-%m-%d").to_string())
+                .unwrap_or_default();
+
+            let stats = self.get_daily_stats(&date).unwrap_or_default();
+            results.push((date, stats));
+        }
+
+        Ok(results)
+    }
 }
