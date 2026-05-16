@@ -2,6 +2,7 @@ mod analytics;
 mod categories;
 mod commands;
 mod database;
+mod export;
 mod insights;
 mod tracker;
 
