@@ -1,0 +1,421 @@
+PRD — Lopa
+AI-Powered Digital Wellbeing Platform for Windows
+
+Version: 1.0
+Status: Draft
+Product: Lopa
+
+1. Executive Summary
+
+Lopa is a premium AI-powered digital wellbeing platform designed for Windows.
+
+The product combines:
+
+realtime activity tracking
+behavioral analytics
+AI-generated insights
+focus management
+emotionally intelligent UX
+luxury glass-based UI
+
+Unlike traditional productivity software, Lopa is positioned as:
+
+“A digital wellbeing operating layer.”
+
+The platform prioritizes:
+
+privacy transparency
+beautiful design
+low system resource usage
+scalable architecture
+AI-enhanced habit intelligence
+2. Vision
+
+Create the most visually refined and emotionally intelligent digital wellbeing platform for desktop operating systems.
+
+Lopa should feel:
+
+calm
+ambient
+luxurious
+alive
+trustworthy
+
+The product experience should resemble:
+
+Apple-quality interaction design
+modern motion systems
+ambient intelligence
+operating-system-level polish
+3. Product Goals
+Primary Goals
+Help users understand digital behavior
+Improve focus and productivity
+Reduce unhealthy screen habits
+Generate actionable AI insights
+Build long-term retention through personalized wellbeing intelligence
+4. Target Users
+Primary Audience
+Students
+Developers
+Designers
+Creators
+Remote workers
+Gamers
+Productivity enthusiasts
+5. Core Features
+5.1 Activity Tracking
+Description
+
+Realtime monitoring of foreground applications and activity sessions.
+
+Capabilities
+Active application tracking
+Session duration tracking
+Idle detection
+Focus session monitoring
+App category classification
+Daily and weekly analytics
+Non-Goals
+
+Lopa WILL NOT:
+
+capture keystrokes
+record screen contents
+silently access private files
+monitor passwords
+act as spyware
+5.2 AI Insight Engine
+Description
+
+AI-generated behavioral analysis and wellbeing recommendations.
+
+Features
+Focus pattern detection
+Productivity scoring
+Burnout prediction
+Distraction analysis
+Personalized recommendations
+Habit trend summaries
+Example Insights
+
+“Your most productive period is between 8 PM and 10 PM.”
+
+“You lose focus after approximately 26 minutes.”
+
+5.3 Focus Mode
+Features
+App blocking
+Notification reduction
+Ambient UI mode
+Session timers
+Soundscapes
+Deep work tracking
+5.4 Dashboard
+Widgets
+Daily screen time
+Focus score
+Productivity timeline
+App usage breakdown
+AI recommendations
+Focus streaks
+Wellness trends
+5.5 AI Chat Assistant
+Features
+
+Natural language wellbeing assistant.
+
+Examples:
+
+“Why was I distracted today?”
+“How can I improve focus?”
+“Summarize my week.”
+5.6 Monthly Reports
+Description
+
+AI-generated visual reports similar to:
+
+Spotify Wrapped
+Apple Health summaries
+Metrics
+Most used apps
+Focus trends
+Productivity heatmaps
+Distraction spikes
+Sleep impact estimation
+6. Design System
+Design Philosophy
+Principles
+Minimal
+Emotional
+Ambient
+Layered depth
+Glassmorphism
+Soft motion
+OS-native feel
+Visual Style
+UI Characteristics
+Frosted glass
+Acrylic blur
+Dynamic transparency
+Smooth gradients
+Subtle shadows
+Floating layers
+Motion-driven navigation
+Motion System
+Animation Principles
+Spring-based motion
+Physics interactions
+Smooth transitions
+Low latency response
+Fluid hover effects
+7. Technical Architecture
+7.1 Frontend
+Stack
+Tauri
+React
+TypeScript
+TailwindCSS
+Framer Motion
+7.2 Backend Architecture
+Long-Term Architecture
+
+Microservice-oriented architecture.
+
+Core Services
+Auth Service
+
+Handles:
+
+authentication
+device sessions
+JWT management
+User Service
+
+Handles:
+
+profiles
+preferences
+subscriptions
+Tracking Service
+
+Handles:
+
+activity ingestion
+event normalization
+session tracking
+Analytics Service
+
+Handles:
+
+trend analysis
+productivity scoring
+reporting
+AI Insight Service
+
+Handles:
+
+AI summaries
+recommendations
+behavioral analysis
+Notification Service
+
+Handles:
+
+reminders
+alerts
+push notifications
+Billing Service
+
+Handles:
+
+subscriptions
+payments
+invoices
+7.3 Backend Tech Stack
+Core Services
+Rust
+Go
+AI Services
+Python
+FastAPI
+7.4 Databases
+Primary Database
+PostgreSQL
+Cache
+Redis
+Analytics Database (Future)
+ClickHouse
+Vector Database (Future)
+Qdrant or pgvector
+7.5 Infrastructure
+Containerization
+Docker
+Orchestration
+Kubernetes (future scaling)
+CDN
+Cloudflare
+Object Storage
+S3-compatible storage
+7.6 Observability
+Monitoring
+Prometheus
+Grafana
+Logging
+Loki
+Tracing
+OpenTelemetry
+8. Security Requirements
+Mandatory Security Features
+Encryption
+TLS everywhere
+encrypted local databases
+encrypted backups
+Authentication
+OAuth
+JWT rotation
+device verification
+Data Protection
+secure storage
+token isolation
+secrets management
+9. Privacy & Compliance
+Core Principles
+explicit consent
+transparent collection
+opt-in analytics
+export/delete data support
+User Consent Flow
+
+During onboarding:
+
+“Help improve Lopa by securely sharing anonymous wellbeing analytics.”
+
+Must include:
+
+explanation
+opt-in toggle
+privacy policy link
+Compliance Targets
+Future Compliance
+GDPR
+CCPA
+India DPDP Act
+10. AI & Data Policy
+Data Usage
+Allowed
+anonymized analytics
+aggregated behavioral trends
+productivity metrics
+AI enhancement
+Forbidden
+keystroke collection
+password storage
+hidden monitoring
+unauthorized screenshots
+11. Monetization
+Free Plan
+basic tracking
+screen time dashboard
+limited focus sessions
+Pro Plan
+AI insights
+advanced analytics
+focus intelligence
+personalized coaching
+Team Plan (Future)
+organizations
+schools
+creator teams
+12. Scalability Strategy
+Phase 1
+
+Modular monolith.
+
+Phase 2
+
+Extract:
+
+AI service
+analytics service
+Phase 3
+
+Introduce:
+
+event queues
+distributed processing
+realtime sync
+Phase 4
+
+Full microservice ecosystem.
+
+13. Event-Driven System
+Example Events
+activity.started
+activity.ended
+focus.started
+focus.completed
+insight.generated
+subscription.updated
+Messaging Infrastructure
+Future Queue System
+NATS
+Kafka (future)
+14. Performance Requirements
+Desktop App
+Startup under 2 seconds
+Low idle CPU usage
+Low battery consumption
+Background-safe operation
+Backend
+horizontally scalable
+event-driven
+fault-tolerant
+15. MVP Scope
+Included
+app tracking
+dashboard
+AI summaries
+focus mode
+local analytics
+onboarding
+glass UI system
+Excluded
+mobile app
+social features
+enterprise management
+cross-platform sync
+advanced RAG memory
+16. Risks
+Technical Risks
+Windows API inconsistency
+tracking accuracy
+AI cost scaling
+realtime analytics complexity
+Product Risks
+privacy concerns
+spyware perception
+battery usage
+trust issues
+17. Success Metrics
+User Metrics
+DAU/MAU
+retention
+session length
+focus session completion
+Product Metrics
+AI engagement
+subscription conversion
+weekly active usage
+insight interaction rate
+18. Brand Positioning
+
+Lopa is NOT:
+
+enterprise monitoring software
+surveillance software
+generic productivity software
+
+Lopa IS:
+
+“An intelligent digital wellbeing operating layer for modern computing.”
