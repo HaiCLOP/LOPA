@@ -13,9 +13,13 @@ import { InsightsPage } from './components/pages/InsightsPage';
 import { ActivityPage } from './components/pages/ActivityPage';
 import { FocusPage } from './components/pages/FocusPage';
 import { GoalsPage } from './components/pages/GoalsPage';
+import { ReportsPage } from './components/pages/ReportsPage';
+import { CoachPage } from './components/pages/CoachPage';
 import { statCards } from './data/mockData';
 import { useDailyStats, useTrackingControl } from './hooks/useTauri';
 import { useAppStore } from './stores/appStore';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { ToastContainer } from './components/ui/Toast';
 import type { StatCardData } from './types';
 
 function Dashboard() {
@@ -62,6 +66,10 @@ function CurrentPage() {
       return <ActivityPage />;
     case 'goals':
       return <GoalsPage />;
+    case 'ai-coach':
+      return <CoachPage />;
+    case 'reports':
+      return <ReportsPage />;
     case 'settings':
       return <SettingsPage />;
     default:
@@ -70,9 +78,12 @@ function CurrentPage() {
 }
 
 export default function App() {
+  useKeyboardShortcuts();
+
   return (
     <AppLayout>
       <CurrentPage />
+      <ToastContainer />
     </AppLayout>
   );
 }
