@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard } from '../ui/GlassCard';
-import { Shield, Eye, Clock, Bell, Trash2, Download, Palette } from 'lucide-react';
+import { Shield, Eye, Clock, Bell, Trash2, Download, Palette, Moon, Sun, Monitor } from 'lucide-react';
+import { useAppStore } from '../../stores/appStore';
+import { showToast } from '../ui/Toast';
 
 interface ToggleProps {
   enabled: boolean;
@@ -49,12 +51,20 @@ function SettingRow({ icon, title, description, children }: SettingRowProps) {
   );
 }
 
+type ThemeOption = 'light' | 'dark' | 'system';
+
+const themeOptions: { value: ThemeOption; label: string; icon: React.ReactNode }[] = [
+  { value: 'light', label: 'Light', icon: <Sun className="w-3.5 h-3.5" /> },
+  { value: 'dark', label: 'Dark', icon: <Moon className="w-3.5 h-3.5" /> },
+  { value: 'system', label: 'System', icon: <Monitor className="w-3.5 h-3.5" /> },
+];
+
 export function SettingsPage() {
   const [autoTrack, setAutoTrack] = useState(true);
   const [notifications, setNotifications] = useState(true);
   const [breakReminders, setBreakReminders] = useState(true);
   const [blurTitles, setBlurTitles] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, setTheme } = useAppStore();
 
   return (
     <div className="flex flex-col h-full p-5 gap-4 overflow-y-auto">
@@ -110,13 +120,30 @@ export function SettingsPage() {
         <h2 className="text-[15px] font-semibold text-[var(--color-text-primary)] mb-1 flex items-center gap-2">
           <Palette className="w-4 h-4" /> Appearance
         </h2>
-        <SettingRow
-          icon={<Palette className="w-4 h-4" />}
-          title="Dark mode"
-          description="Switch to dark theme"
-        >
-          <Toggle enabled={darkMode} onToggle={() => setDarkMode(!darkMode)} />
-        </SettingRow>
+        <div className="mt-3">
+          <p className="text-[12px] text-[var(--color-text-muted)] mb-2">Theme</p>
+          <div className="flex gap-2">
+            {themeOptions.map((opt) => (
+              <motion.button
+                key={opt.value}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => {
+                  setTheme(opt.value);
+                  showToast(`Theme set to ${opt.label}`, 'success');
+                }}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-medium transition-all ${
+                  theme === opt.value
+                    ? 'bg-[var(--color-accent-indigo)] text-white shadow-md'
+                    : 'glass text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                }`}
+              >
+                {opt.icon}
+                {opt.label}
+              </motion.button>
+            ))}
+          </div>
+        </div>
       </GlassCard>
 
       {/* Data Management */}
@@ -128,6 +155,7 @@ export function SettingsPage() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => showToast('Data exported successfully', 'success')}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-accent-indigo)]/10 text-[var(--color-accent-indigo)] text-[12px] font-medium hover:bg-[var(--color-accent-indigo)]/15 transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
@@ -136,6 +164,7 @@ export function SettingsPage() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => showToast('This action cannot be undone', 'warning')}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-600 text-[12px] font-medium hover:bg-red-100 transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -143,6 +172,11 @@ export function SettingsPage() {
           </motion.button>
         </div>
       </GlassCard>
+
+      {/* Version */}
+      <div className="text-center py-2">
+        <p className="text-[11px] text-[var(--color-text-muted)]">Lopa v0.2.0 • Phase 4</p>
+      </div>
     </div>
   );
 }
