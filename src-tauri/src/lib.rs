@@ -12,9 +12,10 @@ use database::Database;
 use reminders::BreakReminder;
 use tracker::Tracker;
 use tauri::{
+    Emitter,
     Manager,
     menu::{Menu, MenuItem},
-    tray::TrayIconEvent,
+    tray::{TrayIconBuilder, TrayIconEvent},
 };
 use std::sync::Arc;
 
@@ -41,19 +42,20 @@ pub fn run() {
 
             app.manage(AppState { db, tracker });
 
-            // System tray menu
+            // System tray
             let handle = app.handle();
-            if let Some(tray) = handle.tray_icon_by_id("main-tray") {
-                let show_item = MenuItem::with_id(handle, "show", "Show Lopa", true, None::<&str>)?;
-                let pause_item = MenuItem::with_id(handle, "pause", "Pause Tracking", true, None::<&str>)?;
-                let quit_item = MenuItem::with_id(handle, "quit", "Quit", true, None::<&str>)?;
+            let show_item = MenuItem::with_id(handle, "show", "Show Lopa", true, None::<&str>)?;
+            let pause_item = MenuItem::with_id(handle, "pause", "Pause Tracking", true, None::<&str>)?;
+            let quit_item = MenuItem::with_id(handle, "quit", "Quit", true, None::<&str>)?;
+            let menu = Menu::with_items(handle, &[&show_item, &pause_item, &quit_item])?;
 
-                let menu = Menu::with_items(handle, &[&show_item, &pause_item, &quit_item])?;
-                tray.set_menu(Some(menu))?;
-                tray.set_show_menu_on_left_click(false)?;
+            let app_handle = handle.clone();
+            let app_handle2 = handle.clone();
 
-                let app_handle = handle.clone();
-                tray.on_menu_event(move |_app, event| {
+            let _tray = TrayIconBuilder::new()
+                .menu(&menu)
+                .tooltip("Lopa — Digital Wellbeing")
+                .on_menu_event(move |_app, event| {
                     match event.id.as_ref() {
                         "show" => {
                             if let Some(window) = app_handle.get_webview_window("main") {
@@ -66,10 +68,8 @@ pub fn run() {
                         }
                         _ => {}
                     }
-                });
-
-                let app_handle2 = handle.clone();
-                tray.on_tray_icon_event(move |_tray, event| {
+                })
+                .on_tray_icon_event(move |_tray, event| {
                     if let TrayIconEvent::Click { button, .. } = event {
                         if button == tauri::tray::MouseButton::Left {
                             if let Some(window) = app_handle2.get_webview_window("main") {
@@ -78,8 +78,8 @@ pub fn run() {
                             }
                         }
                     }
-                });
-            }
+                })
+                .build(app)?;
 
             Ok(())
         })

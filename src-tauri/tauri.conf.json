@@ -24,12 +24,6 @@
         "visible": true
       }
     ],
-    "trayIcon": {
-      "id": "main-tray",
-      "iconPath": "icons/icon.png",
-      "tooltip": "Lopa — Digital Wellbeing",
-      "iconAsTemplate": false
-    },
     "security": {
       "csp": null
     }

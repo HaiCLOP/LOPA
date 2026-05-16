@@ -2,6 +2,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread;
 use std::time::Duration;
+use tauri::Emitter;
 
 /// Monitors continuous work sessions and emits break reminders.
 /// Sends a Tauri event when the user has been active beyond the threshold.
