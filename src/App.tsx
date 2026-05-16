@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
 import { Header } from './components/layout/Header';
 import { StatCardsRow } from './components/dashboard/StatCard';
@@ -15,11 +16,14 @@ import { FocusPage } from './components/pages/FocusPage';
 import { GoalsPage } from './components/pages/GoalsPage';
 import { ReportsPage } from './components/pages/ReportsPage';
 import { CoachPage } from './components/pages/CoachPage';
+import { Onboarding } from './components/onboarding/Onboarding';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { ToastContainer } from './components/ui/Toast';
 import { statCards } from './data/mockData';
 import { useDailyStats, useTrackingControl } from './hooks/useTauri';
 import { useAppStore } from './stores/appStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
-import { ToastContainer } from './components/ui/Toast';
+import { useBreakReminder } from './hooks/useBreakReminder';
 import type { StatCardData } from './types';
 
 function Dashboard() {
@@ -78,12 +82,43 @@ function CurrentPage() {
 }
 
 export default function App() {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const { theme, setTheme } = useAppStore();
+
   useKeyboardShortcuts();
+  useBreakReminder(50);
+
+  // Initialize theme on mount
+  useEffect(() => {
+    const resolved = theme === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : theme;
+    document.documentElement.setAttribute('data-theme', resolved);
+  }, [theme]);
+
+  // Check if first launch
+  useEffect(() => {
+    const hasOnboarded = localStorage.getItem('lopa-onboarded');
+    if (!hasOnboarded) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('lopa-onboarded', 'true');
+    setShowOnboarding(false);
+  };
+
+  if (showOnboarding) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
 
   return (
-    <AppLayout>
-      <CurrentPage />
-      <ToastContainer />
-    </AppLayout>
+    <ErrorBoundary>
+      <AppLayout>
+        <CurrentPage />
+        <ToastContainer />
+      </AppLayout>
+    </ErrorBoundary>
   );
 }
